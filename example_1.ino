@@ -1,22 +1,26 @@
 #include <Wire.h>
 #include <M5Stack.h>
-const int i2c_addr = 0x1C;
+const int i2c_addr = 0x1C; //QT2120のアドレス
+
 int d=0,c=0,e=0;
 int volume=3;
 void setup() {
 
-  Serial.begin(115200);
-  Wire.begin();
+  Serial.begin(115200);　
+  Wire.begin();　//I2C開始
   M5.begin();      
   M5.Power.begin();  
   M5.Lcd.setTextSize(7);
  
   delay(500);
-  pinMode(26, OUTPUT);
-  pinMode(36, INPUT);
+  //M5Stack Fire PortB　接続している One Key Grove ver(https://www.switch-science.com/products/9874)の使用を想定
+  //One keyを押すと１オクターブ変わる。26ピンはOne KeyのLED変化
+  pinMode(26, OUTPUT);　
+  pinMode(36, INPUT);　
   
 }
 
+//タッチセンサーICの変化値を読み取りするための関数
 int value(int a) {
   Wire.beginTransmission(i2c_addr);
   Wire.write(a);
@@ -27,7 +31,7 @@ int value(int a) {
   return d; 
   
 }
-
+//入力値に対応したトーンをスピーカー出力　octの入力値に対応してオクターブを変化
 void tone_(int c,int d, int oct) {
   M5.Speaker.setVolume(volume);
 
